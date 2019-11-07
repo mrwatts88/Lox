@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include "TokenType.h"
+#include "ErrorHandler.h"
 
 Scanner::Scanner(std::string source) : source{source} {}
 
@@ -72,6 +73,7 @@ void Scanner::scanToken()
     addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
     break;
   default:
+    ErrorHandler::error(line, "Unexpected character");
     break;
   }
 }

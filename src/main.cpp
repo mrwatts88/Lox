@@ -1,8 +1,12 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sysexits.h>
+#include <fstream>
+#include <sstream>
 #include "Scanner.h"
 #include "Token.h"
+#include "ErrorHandler.h"
 
 void runFile(std::string);
 void runPrompt();
@@ -13,7 +17,7 @@ int main(int argc, char **argv)
   if (argc > 2)
   {
     std::cout << "Usage: jlox [script]" << std::endl;
-    return 64;
+    return EX_USAGE;
   }
   else if (argc == 2)
   {
@@ -27,7 +31,13 @@ int main(int argc, char **argv)
 
 void runFile(std::string path)
 {
-  std::cout << path << std::endl;
+  std::ifstream ifs(path, std::ifstream::in);
+  std::stringstream buffer;
+  buffer << ifs.rdbuf();
+  run(buffer.str());
+
+  if (ErrorHandler::hadError)
+    exit(EX_DATAERR);
 }
 
 void runPrompt()
@@ -39,6 +49,7 @@ void runPrompt()
     std::cout << "> ";
     getline(std::cin, line);
     run(line);
+    ErrorHandler::hadError = false;
   }
 }
 
