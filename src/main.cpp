@@ -1,6 +1,8 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "Scanner.h"
+#include "Token.h"
 
 void runFile(std::string);
 void runPrompt();
@@ -40,7 +42,15 @@ void runPrompt()
   }
 }
 
-void run(std::string line)
+void run(std::string source)
 {
-  std::cout << line << std::endl;
+  Scanner *scanner = new Scanner(source);
+  std::vector<Token> tokens = scanner->scanTokens();
+
+  for (auto token : tokens)
+  {
+    std::cout << "token: " << token << std::endl;
+  }
+
+  delete scanner;
 }

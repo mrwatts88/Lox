@@ -1,5 +1,7 @@
 
-#include "lib/enum.h"
+#pragma once
+
+#include "../lib/enum.h"
 
 BETTER_ENUM(
     TokenType, int,
