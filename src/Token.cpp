@@ -1,12 +1,50 @@
 #include "Token.h"
 #include <string>
+#include <iostream>
 
-Token::Token(TokenType type, std::string lexeme, std::string literal, unsigned line)
-    : type{type}, lexeme{lexeme}, literal{literal}, line{line} {}
+Token::Token(TokenType type, std::string lexeme, std::string strLiteral, unsigned line)
+    : type{type}, lexeme{lexeme}, literalType{LiteralType::STRING}, line{line}
+{
+
+  this->strLiteral = new std::string{strLiteral};
+}
+
+Token::Token(TokenType type, std::string lexeme, double numLiteral, unsigned line)
+    : type{type}, lexeme{lexeme}, literalType{LiteralType::NUMBER}, line{line}
+{
+  this->numLiteral = new double{numLiteral};
+}
+
+Token::Token(TokenType type, std::string lexeme, unsigned line)
+    : type{type}, lexeme{lexeme}, literalType{LiteralType::NONE}, line{line} {}
+
+Token::~Token()
+{
+  delete strLiteral;
+  delete numLiteral;
+}
 
 std::string Token::toString()
 {
   std::string s = type._to_string();
+
+  std::string literal{};
+  switch (literalType)
+  {
+  case LiteralType::NONE:
+    literal = "";
+    break;
+  case LiteralType::NUMBER:
+    literal = std::to_string(*numLiteral);
+    break;
+  case LiteralType::STRING:
+    literal = *strLiteral;
+    break;
+  default:
+    literal = "";
+    break;
+  }
+
   return s + " " + lexeme + " " + literal;
 }
 

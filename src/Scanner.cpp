@@ -7,7 +7,7 @@
 
 Scanner::Scanner(std::string source) : source{source} {}
 
-std::vector<Token> Scanner::scanTokens()
+std::vector<Token *> Scanner::scanTokens()
 {
   while (!isAtEnd())
   {
@@ -15,8 +15,7 @@ std::vector<Token> Scanner::scanTokens()
     scanToken();
   }
 
-  Token token{TokenType::EOFF, "", "", line};
-  tokens.push_back(token);
+  tokens.push_back(new Token{TokenType::EOFF, "EOF", line});
   return tokens;
 }
 
@@ -72,10 +71,56 @@ void Scanner::scanToken()
   case '>':
     addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
     break;
+  case '/':
+    if (match('/'))
+    {
+      // we found a comment
+      consumeUntil('\n');
+    }
+    else
+    {
+      addToken(TokenType::SLASH);
+    }
+  case ' ':
+  case '\r':
+  case '\t':
+    // Ignore whitespace.
+    break;
+  case '\n':
+    line++;
+    break;
+  case '"':
+    string();
+    break;
   default:
-    ErrorHandler::error(line, "Unexpected character");
+    if (isdigit(c))
+    {
+      number();
+    }
+    else
+    {
+      ErrorHandler::error(line, "Unexpected character");
+    }
     break;
   }
+}
+
+void Scanner::addToken(TokenType type)
+{
+  std::string text = source.substr(start, current - start);
+  tokens.emplace_back(new Token{type, text, line});
+}
+
+void Scanner::addToken(TokenType type, std::string literal)
+{
+  std::string text = source.substr(start, current - start);
+  tokens.emplace_back(new Token{type, text, literal, line});
+}
+
+void Scanner::addToken(TokenType type, double literal)
+{
+  std::string text = source.substr(start, current - start);
+  tokens.emplace_back(new Token{type, text, literal, line});
 }
 
 char Scanner::advance()
@@ -83,15 +128,11 @@ char Scanner::advance()
   return source.at(current++);
 }
 
-void Scanner::addToken(TokenType type)
+char Scanner::peek()
 {
-  addToken(type, "");
-}
-
-void Scanner::addToken(TokenType type, std::string literal)
-{
-  std::string text = source.substr(start, current - start);
-  tokens.emplace_back(Token{type, text, literal, line});
+  if (isAtEnd())
+    return '\0';
+  return source.at(current);
 }
 
 bool Scanner::match(char expected)
@@ -103,4 +144,54 @@ bool Scanner::match(char expected)
 
   current++;
   return true;
+}
+
+void Scanner::consumeUntil(char end)
+{
+  while (peek() != end && !isAtEnd())
+    advance();
+}
+
+void Scanner::string()
+{
+  while (peek() != '"' && !isAtEnd())
+  {
+    if (peek() == '\n')
+      line++;
+    advance();
+  }
+
+  if (isAtEnd())
+  {
+    ErrorHandler::error(line, "Unterminated string.");
+    return;
+  }
+
+  advance(); // Move past the closing ";
+
+  std::string value = source.substr(start + 1, current - start - 2);
+  addToken(TokenType::STRING, value);
+}
+
+void Scanner::number()
+{
+  while (isdigit(peek()))
+    advance();
+
+  if (peek() == '.' && isdigit(peekNext()))
+  {
+    advance();
+
+    while (isdigit(peek()))
+      advance();
+  }
+
+  addToken(TokenType::NUMBER, std::stod(source.substr(start, current - start)));
+}
+
+char Scanner::peekNext()
+{
+  if (current + 1 >= source.length())
+    return '\0';
+  return source.at(current + 1);
 }

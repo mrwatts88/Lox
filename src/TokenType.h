@@ -3,6 +3,13 @@
 
 #include "../lib/enum.h"
 
+enum LiteralType
+{
+    NONE,
+    STRING,
+    NUMBER
+};
+
 BETTER_ENUM(
     TokenType, int,
 
