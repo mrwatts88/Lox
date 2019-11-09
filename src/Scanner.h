@@ -7,7 +7,7 @@
 class Scanner
 {
   const std::string source;
-  std::vector<Token *> tokens;
+  std::vector<Token> tokens{};
   unsigned start{0};
   unsigned current{0};
   unsigned line{1};
@@ -27,5 +27,5 @@ class Scanner
 
 public:
   Scanner(std::string source);
-  std::vector<Token *> scanTokens();
+  std::vector<Token> scanTokens();
 };

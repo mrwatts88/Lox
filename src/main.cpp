@@ -56,12 +56,11 @@ void runPrompt()
 void run(std::string source)
 {
   Scanner *scanner = new Scanner(source);
-  std::vector<Token *> tokens = scanner->scanTokens();
+  std::vector<Token> tokens = scanner->scanTokens();
 
   for (auto token : tokens)
   {
-    std::cout << "token: " << *token << std::endl;
-    delete token;
+    std::cout << "token: " << token << std::endl;
   }
 
   delete scanner;

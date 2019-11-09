@@ -7,7 +7,7 @@
 
 Scanner::Scanner(std::string source) : source{source} {}
 
-std::vector<Token *> Scanner::scanTokens()
+std::vector<Token> Scanner::scanTokens()
 {
   while (!isAtEnd())
   {
@@ -15,7 +15,7 @@ std::vector<Token *> Scanner::scanTokens()
     scanToken();
   }
 
-  tokens.push_back(new Token{TokenType::EOFF, "EOF", line});
+  tokens.emplace_back(Token{TokenType::EOFF, "EOF", line});
   return tokens;
 }
 
@@ -108,19 +108,19 @@ void Scanner::scanToken()
 void Scanner::addToken(TokenType type)
 {
   std::string text = source.substr(start, current - start);
-  tokens.emplace_back(new Token{type, text, line});
+  tokens.emplace_back(Token{type, text, line});
 }
 
 void Scanner::addToken(TokenType type, std::string literal)
 {
   std::string text = source.substr(start, current - start);
-  tokens.emplace_back(new Token{type, text, literal, line});
+  tokens.emplace_back(Token{type, text, literal, line});
 }
 
 void Scanner::addToken(TokenType type, double literal)
 {
   std::string text = source.substr(start, current - start);
-  tokens.emplace_back(new Token{type, text, literal, line});
+  tokens.emplace_back(Token{type, text, literal, line});
 }
 
 char Scanner::advance()

@@ -5,7 +5,6 @@
 Token::Token(TokenType type, std::string lexeme, std::string strLiteral, unsigned line)
     : type{type}, lexeme{lexeme}, literalType{LiteralType::STRING}, line{line}
 {
-
   this->strLiteral = new std::string{strLiteral};
 }
 
@@ -17,6 +16,44 @@ Token::Token(TokenType type, std::string lexeme, double numLiteral, unsigned lin
 
 Token::Token(TokenType type, std::string lexeme, unsigned line)
     : type{type}, lexeme{lexeme}, literalType{LiteralType::NONE}, line{line} {}
+
+Token::Token(const Token &token)
+    : type{token.type}, lexeme{token.lexeme}, literalType{token.literalType}, line{token.line}
+{
+  if (token.strLiteral != nullptr)
+  {
+    std::string *copy = new std::string{*(token.strLiteral)};
+    strLiteral = copy;
+  }
+
+  if (token.numLiteral != nullptr)
+  {
+    double *copy = new double{*(token.numLiteral)};
+    numLiteral = copy;
+  }
+}
+
+Token &Token::operator=(const Token &token)
+{
+  type = token.type;
+  lexeme = token.lexeme;
+  literalType = token.literalType;
+  line = token.line;
+
+  if (token.strLiteral != nullptr)
+  {
+    std::string *copy = new std::string{*(token.strLiteral)};
+    strLiteral = copy;
+  }
+
+  if (token.numLiteral != nullptr)
+  {
+    double *copy = new double{*(token.numLiteral)};
+    numLiteral = copy;
+  }
+
+  return *this;
+}
 
 Token::~Token()
 {
