@@ -1,4 +1,4 @@
-!= // this is a comment
-){4.8}"hey"
-v!
-,
+// my program
+for(var i = 0; i < 5; i++) {
+  print("hello world");
+}

@@ -2,10 +2,13 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
 #include "Token.h"
+#include "TokenType.h"
 
 class Scanner
 {
+  static std::unordered_map<std::string, TokenType> keywords;
   const std::string source;
   std::vector<Token> tokens{};
   unsigned start{0};
@@ -24,6 +27,7 @@ class Scanner
   void consumeUntil(char end);
   void string();
   void number();
+  void identifier();
 
 public:
   Scanner(std::string source);

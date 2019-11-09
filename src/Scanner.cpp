@@ -4,6 +4,7 @@
 #include <vector>
 #include "TokenType.h"
 #include "ErrorHandler.h"
+#include <unordered_map>
 
 Scanner::Scanner(std::string source) : source{source} {}
 
@@ -97,6 +98,10 @@ void Scanner::scanToken()
     {
       number();
     }
+    else if (isalpha(c))
+    {
+      identifier();
+    }
     else
     {
       ErrorHandler::error(line, "Unexpected character");
@@ -107,20 +112,20 @@ void Scanner::scanToken()
 
 void Scanner::addToken(TokenType type)
 {
-  std::string text = source.substr(start, current - start);
-  tokens.emplace_back(Token{type, text, line});
+  std::string lexeme = source.substr(start, current - start);
+  tokens.emplace_back(Token{type, lexeme, line});
 }
 
 void Scanner::addToken(TokenType type, std::string literal)
 {
-  std::string text = source.substr(start, current - start);
-  tokens.emplace_back(Token{type, text, literal, line});
+  std::string lexeme = source.substr(start, current - start);
+  tokens.emplace_back(Token{type, lexeme, literal, line});
 }
 
 void Scanner::addToken(TokenType type, double literal)
 {
-  std::string text = source.substr(start, current - start);
-  tokens.emplace_back(Token{type, text, literal, line});
+  std::string lexeme = source.substr(start, current - start);
+  tokens.emplace_back(Token{type, lexeme, literal, line});
 }
 
 char Scanner::advance()
@@ -133,6 +138,13 @@ char Scanner::peek()
   if (isAtEnd())
     return '\0';
   return source.at(current);
+}
+
+char Scanner::peekNext()
+{
+  if (current + 1 >= source.length())
+    return '\0';
+  return source.at(current + 1);
 }
 
 bool Scanner::match(char expected)
@@ -189,9 +201,36 @@ void Scanner::number()
   addToken(TokenType::NUMBER, std::stod(source.substr(start, current - start)));
 }
 
-char Scanner::peekNext()
+void Scanner::identifier()
 {
-  if (current + 1 >= source.length())
-    return '\0';
-  return source.at(current + 1);
+  while (isalpha(peek()) || isdigit(peek()))
+    advance();
+
+  std::string lexeme = source.substr(start, current - start);
+
+  std::unordered_map<std::string, TokenType>::const_iterator typeIter = Scanner::keywords.find(lexeme);
+
+  if (typeIter == keywords.end())
+    addToken(TokenType::IDENTIFIER);
+  else
+    addToken(typeIter->second);
 }
+
+std::unordered_map<std::string, TokenType> Scanner::keywords = {
+    {"and", TokenType::AND},
+    {"class", TokenType::CLASS},
+    {"else", TokenType::ELSE},
+    {"false", TokenType::FALSE},
+    {"for", TokenType::FOR},
+    {"fun", TokenType::FUN},
+    {"if", TokenType::IF},
+    {"nil", TokenType::NIL},
+    {"or", TokenType::OR},
+    {"print", TokenType::PRINT},
+    {"return", TokenType::RETURN},
+    {"super", TokenType::SUPER},
+    {"this", TokenType::THIS},
+    {"true", TokenType::TRUE},
+    {"var", TokenType::VAR},
+    {"while", TokenType::WHILE},
+};
