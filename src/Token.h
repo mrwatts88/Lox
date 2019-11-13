@@ -17,6 +17,7 @@ public:
   Token(TokenType type, std::string lexeme, double numLiteral, unsigned line);
   Token(TokenType type, std::string lexeme, unsigned line);
   Token(const Token &token);
+  Token(Token &&token);
 
   Token &operator=(const Token &rhs);
   friend std::ostream &operator<<(std::ostream &out, Token &token);

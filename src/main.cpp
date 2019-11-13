@@ -58,7 +58,7 @@ void run(std::string source)
   Scanner *scanner = new Scanner(source);
   std::vector<Token> tokens = scanner->scanTokens();
 
-  for (auto token : tokens)
+  for (auto &token : tokens)
   {
     std::cout << "token: " << token << std::endl;
   }

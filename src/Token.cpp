@@ -33,6 +33,15 @@ Token::Token(const Token &token)
   }
 }
 
+Token::Token(Token &&token)
+    : type{token.type}, lexeme{token.lexeme}, literalType{token.literalType}, line{token.line}
+{
+  strLiteral = token.strLiteral;
+  numLiteral = token.numLiteral;
+  token.strLiteral = nullptr;
+  token.numLiteral = nullptr;
+}
+
 Token &Token::operator=(const Token &token)
 {
   type = token.type;
