@@ -1,8 +1,13 @@
+#pragma once
+
 #include <vector>
 #include "Token.h"
+#include "Visitor.h"
 
 class Expr
 {
+public:
+  // virtual R accept(Visitor<R> visitor) = 0;
 };
 
 class Binary : public Expr

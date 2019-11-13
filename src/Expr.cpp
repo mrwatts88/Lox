@@ -1,4 +1,9 @@
 #include "Expr.h"
+#include "Token.h"
+
+// void Expr::accept(Visitor<R> visitor)
+// {
+// }
 
 Binary::Binary(Expr left, Token op, Expr right)
     : left{left}, op{op}, right{right} {}
