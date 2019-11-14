@@ -2,6 +2,19 @@
 
 #include "Expr.h"
 
+class Assign;
+class Binary;
+class Call;
+class Get;
+class Grouping;
+class Literal;
+class Logical;
+class Set;
+class Super;
+class This;
+class Unary;
+class Variable;
+
 class Visitor
 {
 public:

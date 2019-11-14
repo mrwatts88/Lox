@@ -4,10 +4,13 @@
 #include "Token.h"
 #include "Visitor.h"
 
+class Visitor;
+
 class Expr
 {
 public:
   virtual std::string accept(Visitor *visitor);
+  virtual ~Expr();
 };
 
 class Binary : public Expr
@@ -18,7 +21,7 @@ class Binary : public Expr
 
 public:
   Binary(Expr left, Token op, Expr right);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Assign : public Expr
@@ -28,7 +31,7 @@ class Assign : public Expr
 
 public:
   Assign(Token name, Expr value);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Call : public Expr
@@ -39,7 +42,7 @@ class Call : public Expr
 
 public:
   Call(Expr callee, Token paren, std::vector<Expr> arguments);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Get : public Expr
@@ -49,7 +52,7 @@ class Get : public Expr
 
 public:
   Get(Expr object, Token name);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Grouping : public Expr
@@ -58,7 +61,7 @@ class Grouping : public Expr
 
 public:
   Grouping(Expr expression);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Literal : public Expr
@@ -66,7 +69,7 @@ class Literal : public Expr
   // todo extend to handle all literal types
 public:
   Literal();
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Logical : public Expr
@@ -77,7 +80,7 @@ class Logical : public Expr
 
 public:
   Logical(Expr left, Token op, Expr right);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Set : public Expr
@@ -88,7 +91,7 @@ class Set : public Expr
 
 public:
   Set(Expr object, Token name, Expr value);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Super : public Expr
@@ -98,7 +101,7 @@ class Super : public Expr
 
 public:
   Super(Token keyword, Token method);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class This : public Expr
@@ -107,7 +110,7 @@ class This : public Expr
 
 public:
   This(Token keyword);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Unary : public Expr
@@ -117,7 +120,7 @@ class Unary : public Expr
 
 public:
   Unary(Token op, Expr right);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };
 
 class Variable : public Expr
@@ -126,5 +129,5 @@ class Variable : public Expr
 
 public:
   Variable(Token name);
-  std::string accept(Visitor *visitor);
+  std::string accept(Visitor *visitor) override;
 };

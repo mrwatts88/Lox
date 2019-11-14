@@ -14,6 +14,8 @@ std::string This::accept(Visitor *visitor) { return visitor->visitThisExpr(*this
 std::string Unary::accept(Visitor *visitor) { return visitor->visitUnaryExpr(*this); }
 std::string Variable::accept(Visitor *visitor) { return visitor->visitVariableExpr(*this); }
 
+Expr::~Expr() {}
+
 Binary::Binary(Expr left, Token op, Expr right)
     : left{left}, op{op}, right{right} {}
 
