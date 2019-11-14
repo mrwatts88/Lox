@@ -70,7 +70,7 @@ Token::~Token()
   delete numLiteral;
 }
 
-std::string Token::toString()
+std::string Token::toString() const
 {
   std::string s = type._to_string();
 
@@ -94,7 +94,7 @@ std::string Token::toString()
   return s + " " + lexeme + " " + literal;
 }
 
-std::ostream &operator<<(std::ostream &out, Token &token)
+std::ostream &operator<<(std::ostream &out, const Token &token)
 {
   out << token.toString();
   return out;

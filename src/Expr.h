@@ -7,7 +7,7 @@
 class Expr
 {
 public:
-  // virtual R accept(Visitor<R> visitor) = 0;
+  virtual std::string accept(Visitor *visitor);
 };
 
 class Binary : public Expr
@@ -18,6 +18,7 @@ class Binary : public Expr
 
 public:
   Binary(Expr left, Token op, Expr right);
+  std::string accept(Visitor *visitor);
 };
 
 class Assign : public Expr
@@ -27,6 +28,7 @@ class Assign : public Expr
 
 public:
   Assign(Token name, Expr value);
+  std::string accept(Visitor *visitor);
 };
 
 class Call : public Expr
@@ -37,6 +39,7 @@ class Call : public Expr
 
 public:
   Call(Expr callee, Token paren, std::vector<Expr> arguments);
+  std::string accept(Visitor *visitor);
 };
 
 class Get : public Expr
@@ -46,19 +49,24 @@ class Get : public Expr
 
 public:
   Get(Expr object, Token name);
+  std::string accept(Visitor *visitor);
 };
 
 class Grouping : public Expr
 {
   const Expr expression;
 
+public:
   Grouping(Expr expression);
+  std::string accept(Visitor *visitor);
 };
 
 class Literal : public Expr
 {
   // todo extend to handle all literal types
+public:
   Literal();
+  std::string accept(Visitor *visitor);
 };
 
 class Logical : public Expr
@@ -69,6 +77,7 @@ class Logical : public Expr
 
 public:
   Logical(Expr left, Token op, Expr right);
+  std::string accept(Visitor *visitor);
 };
 
 class Set : public Expr
@@ -77,7 +86,9 @@ class Set : public Expr
   const Token name;
   const Expr value;
 
+public:
   Set(Expr object, Token name, Expr value);
+  std::string accept(Visitor *visitor);
 };
 
 class Super : public Expr
@@ -85,14 +96,18 @@ class Super : public Expr
   const Token keyword;
   const Token method;
 
+public:
   Super(Token keyword, Token method);
+  std::string accept(Visitor *visitor);
 };
 
 class This : public Expr
 {
   const Token keyword;
 
+public:
   This(Token keyword);
+  std::string accept(Visitor *visitor);
 };
 
 class Unary : public Expr
@@ -100,12 +115,16 @@ class Unary : public Expr
   const Token op;
   const Expr right;
 
+public:
   Unary(Token op, Expr right);
+  std::string accept(Visitor *visitor);
 };
 
 class Variable : public Expr
 {
   const Token name;
 
+public:
   Variable(Token name);
+  std::string accept(Visitor *visitor);
 };

@@ -20,9 +20,9 @@ public:
   Token(Token &&token);
 
   Token &operator=(const Token &rhs);
-  friend std::ostream &operator<<(std::ostream &out, Token &token);
+  friend std::ostream &operator<<(std::ostream &out, const Token &token);
 
-  std::string toString();
+  std::string toString() const;
 
   ~Token();
 };

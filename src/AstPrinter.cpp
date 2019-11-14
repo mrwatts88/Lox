@@ -12,3 +12,4 @@ std::string AstPrinter::visitSuperExpr(Super expr) { return "in visit super"; };
 std::string AstPrinter::visitThisExpr(This expr) { return "in visit this"; };
 std::string AstPrinter::visitUnaryExpr(Unary expr) { return "in visit unary"; };
 std::string AstPrinter::visitVariableExpr(Variable expr) { return "in visit variable"; };
+std::string AstPrinter::print(Expr *expr) { return expr->accept(this); }

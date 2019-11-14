@@ -4,9 +4,10 @@
 #include <string>
 #include "Expr.h"
 
-class AstPrinter : Visitor<std::string>
+class AstPrinter : public Visitor
 {
 public:
+  std::string print(Expr *expr);
   std::string visitAssignExpr(Assign expr) override;
   std::string visitBinaryExpr(Binary expr) override;
   std::string visitCallExpr(Call expr) override;

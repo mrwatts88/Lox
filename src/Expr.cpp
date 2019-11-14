@@ -1,9 +1,18 @@
 #include "Expr.h"
 #include "Token.h"
 
-// void Expr::accept(Visitor<R> visitor)
-// {
-// }
+std::string Binary::accept(Visitor *visitor) { return visitor->visitBinaryExpr(*this); }
+std::string Assign::accept(Visitor *visitor) { return visitor->visitAssignExpr(*this); }
+std::string Call::accept(Visitor *visitor) { return visitor->visitCallExpr(*this); }
+std::string Get::accept(Visitor *visitor) { return visitor->visitGetExpr(*this); }
+std::string Grouping::accept(Visitor *visitor) { return visitor->visitGroupingExpr(*this); }
+std::string Literal::accept(Visitor *visitor) { return visitor->visitLiteralExpr(*this); }
+std::string Logical::accept(Visitor *visitor) { return visitor->visitLogicalExpr(*this); }
+std::string Set::accept(Visitor *visitor) { return visitor->visitSetExpr(*this); }
+std::string Super::accept(Visitor *visitor) { return visitor->visitSuperExpr(*this); }
+std::string This::accept(Visitor *visitor) { return visitor->visitThisExpr(*this); }
+std::string Unary::accept(Visitor *visitor) { return visitor->visitUnaryExpr(*this); }
+std::string Variable::accept(Visitor *visitor) { return visitor->visitVariableExpr(*this); }
 
 Binary::Binary(Expr left, Token op, Expr right)
     : left{left}, op{op}, right{right} {}
